@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 
 export function KicsScan() {
     const [vulnerabilityData, setvulnerabilityData] = useState();
