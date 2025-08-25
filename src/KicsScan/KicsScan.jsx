@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import vulnerabilities from "./data";
+import { FaGithub } from "react-icons/fa";
 
 export function KicsScan() {
     const [vulnerabilityData, setvulnerabilityData] = useState([]);
@@ -22,10 +23,13 @@ export function KicsScan() {
         currentPage * rowsPerPage
     );
     return (
-        <div className="max-w-6xl mx-auto my-10 p-6 bg-white shadow-xl rounded-xl border border-gray-200">
+        <div className="max-w-6xl mx-auto my-10 p-6 bg-white">
             {/* Header */}
             <div className="text-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">Git Leaks</h1>
+                <div className="flex items-center justify-center gap-3 mb-6">
+                    <FaGithub size={28} className="text-black" />
+                    <h1 className="text-3xl font-bold text-gray-800">Git Leaks</h1>
+                </div>
                 <p className="text-gray-500 mt-1">Detected vulnerabilities from repository scan</p>
             </div>
 
@@ -96,61 +100,81 @@ export function KicsScan() {
             {selectedVulnerability && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white w-full max-w-2xl rounded-xl shadow-lg p-6 relative">
-                        <button
-                            onClick={() => setselectedVulnerability(null)}
-                            className="absolute top-3 right-4 flex items-center justify-center w-8 h-8 rounded-full 
-                                        bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 
-                                        transition duration-200 shadow-sm"
-                            aria-label="Close"
-                        >X</button>
-                        <h2 className="text-xl font-bold mb-4 text-gray-800">Source Details</h2>
-                        <div className="text-sm">
-                            <div className="bg-gray-900 text-gray-100 rounded-lg overflow-hidden shadow-md">
-                                <div className="bg-gray-800 px-4 py-2 text-xs text-gray-300">
-                                    <span>{selectedVulnerability.affected_file_path}</span>
-                                </div>
-                                <pre className="px-4 py-3 text-sm overflow-x-auto flex gap-4 items-center">
-                                    <span className="text-gray-400">{selectedVulnerability.line_number}</span>
-                                    <code>{selectedVulnerability.code_snippet}</code>
-                                </pre>
-                            </div>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold text-gray-800">Vulnerability Details</h2>
+                            <button
+                                onClick={() => setselectedVulnerability(null)}
+                                className="text-sm text-gray-500 hover:text-gray-700 transition"
+                            >
+                                ✕
+                            </button>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 bg-gray-50 border rounded-lg p-4">
+
+                        <div className="grid sm:grid-cols-2 gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <div>
-                                <p className="text-xs text-gray-500">Author</p>
-                                <p className="font-medium">{selectedVulnerability.author}</p>
+                                <p className="text-xs text-gray-600">Secret Name</p>
+                                <p className="font-medium text-gray-800">{selectedVulnerability.secret_name}</p>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">Commit</p>
-                                <p className="font-mono text-sm">{selectedVulnerability.commit_hash}</p>
+                                <p className="text-xs text-gray-600">Secret Type</p>
+                                <p className="font-medium text-gray-800">{selectedVulnerability.secret_type}</p>
+                            </div>
+                            <div className="flex flex-col items-start gap-1">
+                                <p className="text-xs text-gray-600">Severity</p>
+                                <span
+                                    className={`inline-flex items-center justify-center w-20 h-6 text-sm font-semibold rounded-md shadow-sm ${
+                                        severityColors[selectedVulnerability.severity_level] || "bg-gray-300 text-gray-800"
+                                    }`}
+                                >
+                                    {selectedVulnerability.severity_level}
+                                </span>
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500">Date</p>
-                                <p className="text-sm">{selectedVulnerability.timestamp}</p>
+                                <p className="text-xs text-gray-600">File Path</p>
+                                <p className="font-mono text-sm text-gray-700">{selectedVulnerability.affected_file_path}</p>
                             </div>
                         </div>
 
-                        {/* Security Reference */}
-                        <div className="mt-6">
-                            <span className="font-bold text-gray-700">
-                                Security Reference:{" "}
-                            </span>
+                        <div className="bg-gray-900 text-gray-100 rounded-lg overflow-hidden shadow-md mb-6">
+                            <div className="bg-gray-800 px-4 py-2 text-xs text-gray-300">
+                                <span>{selectedVulnerability.affected_file_path}</span>
+                            </div>
+                            <pre className="px-4 py-3 text-sm overflow-x-auto flex gap-4 items-center">
+                                <span className="text-gray-400">{selectedVulnerability.line_number}</span>
+                                <code>{selectedVulnerability.code_snippet}</code>
+                            </pre>
+                        </div>
+
+                        <div className="grid sm:grid-cols-3 gap-4 mb-6 bg-blue-50 p-4 rounded-lg">
+                            <div>
+                                <p className="text-xs text-blue-600">Author</p>
+                                <p className="font-medium text-blue-900">{selectedVulnerability.author}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-blue-600">Commit Hash</p>
+                                <p className="font-mono text-sm text-blue-800">{selectedVulnerability.commit_hash}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs text-blue-600">Timestamp</p>
+                                <p className="text-sm text-blue-800">{selectedVulnerability.timestamp}</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                            <p className="font-semibold text-gray-800 mb-2">Security Reference</p>
                             <a
                                 href={`https://cwe.mitre.org/data/definitions/${selectedVulnerability.cwe.split(":")[0].split("-")[1]}.html`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-blue-600 hover:underline"
+                                className="text-blue-700 hover:underline"
                             >
                                 {selectedVulnerability.cwe}
                             </a>
                         </div>
-                        <div className="mt-5">
-                            <span className="font-bold text-gray-700">
-                                Remediation:{" "}
-                            </span>
-                            <span className="text-gray-600 leading-relaxed">
-                                {selectedVulnerability.remediation}
-                            </span>
+
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+                            <p className="font-semibold text-green-800 mb-2">Remediation</p>
+                            <p className="text-green-700 leading-relaxed">{selectedVulnerability.remediation}</p>
                         </div>
                     </div>
                 </div>

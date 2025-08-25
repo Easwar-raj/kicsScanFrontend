@@ -288,20 +288,36 @@ const vulnerabilities = [
         remediation: "Rotate Okta tokens immediately."
     },
     {
-        secret_name: "Dropbox API Key",
-        description: "Dropbox API key exposed in repo.",
-        severity_level: "High",
-        first_detected: "2025-08-29T18:11:45Z",
-        secret_type: "API Key",
-        affected_file_path: "integrations/dropbox.js",
-        line_number: 22,
-        code_snippet: "DROPBOX_KEY=sl.Abc123***",
-        commit_hash: "t3u4v5w6",
-        author: "Maria Perez",
-        timestamp: "2025-08-29T18:00:00Z",
-        platform: "kics-gitleaks",
-        cwe: "CWE-798",
-        remediation: "Rotate key and use encrypted configs."
+        secret_name: "Google API Token",
+        description: "A token string resembling a Google API key was found. This could allow unauthorized access to services.",
+        severity_level: "Medium",
+        first_detected: "2025-08-20T09:15:30Z",
+        secret_type: "API Token",
+        affected_file_path: "src/services/maps.js",
+        line_number: 88,
+        code_snippet: "const apiKey = \"AIzaSyD***\";",
+        commit_hash: "e5f6g7h8",
+        author: "Jane Smith",
+        timestamp: "2025-08-19T14:45:00Z",
+        platform: "hts-secretscanner",
+        cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+        remediation: "Revoke the exposed API key and store it securely in environment variables or a secrets manager."
+    },
+    {
+        secret_name: "Debug Flag",
+        description: "A debug flag was left enabled in the code. While not sensitive, it may expose system behavior.",
+        severity_level: "Low",
+        first_detected: "2025-08-22T17:05:00Z",
+        secret_type: "Config Flag",
+        affected_file_path: "settings/dev_config.js",
+        line_number: 12,
+        code_snippet: "debug_mode = true",
+        commit_hash: "i9j0k1l2",
+        author: "Alex Johnson",
+        timestamp: "2025-08-22T16:59:00Z",
+        platform: "hts-secretscanner",
+        cwe: "CWE-489: Leftover Debug Code",
+        remediation: "Disable debug mode in production and remove leftover debug flags before deployment."
     }
 ];
 
